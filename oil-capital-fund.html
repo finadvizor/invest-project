@@ -1,0 +1,2041 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oil Capital Fund – Prémiová Investiční Platforma</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --bg2: #0B0F14;
+    --gold: #D4AF37;
+    --gold-light: #F0CD6A;
+    --accent: #00D4FF;
+    --text: #FFFFFF;
+    --text-muted: #8A9BAE;
+    --glass: rgba(255,255,255,0.04);
+    --glass-border: rgba(212,175,55,0.18);
+    --glass-accent: rgba(0,212,255,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── PARTICLES ── */
+  #particles-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 60px;
+    background: rgba(5,5,5,0.7);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--glass-border);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .nav-logo span { color: var(--accent); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--gold), #B8960C);
+    color: #000;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 24px;
+    border: none;
+    cursor: pointer;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: opacity 0.3s;
+  }
+
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── TICKER ── */
+  .ticker-bar {
+    position: fixed;
+    top: 65px; left: 0; right: 0;
+    z-index: 99;
+    background: var(--bg2);
+    border-bottom: 1px solid rgba(0,212,255,0.2);
+    overflow: hidden;
+    height: 32px;
+    display: flex;
+    align-items: center;
+  }
+
+  .ticker-inner {
+    display: flex;
+    gap: 60px;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+    padding-left: 100%;
+  }
+
+  .ticker-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ticker-item .sym { color: var(--gold); font-weight: 500; }
+  .ticker-item .up { color: #00E676; }
+  .ticker-item .down { color: #FF5252; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION BASE ── */
+  section { position: relative; z-index: 1; }
+
+  .container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 120px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,175,55,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,212,255,0.06) 0%, transparent 60%);
+  }
+
+  .hero-content { max-width: 760px; }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 6vw, 80px);
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+  }
+
+  .hero-title em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 17px;
+    font-weight: 300;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin-bottom: 48px;
+    line-height: 1.75;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 72px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), #B8960C);
+    color: #000;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border: none;
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(212,175,55,0.35);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 15px 36px;
+    border: 1px solid rgba(0,212,255,0.4);
+    cursor: pointer;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .btn-outline:hover {
+    background: rgba(0,212,255,0.08);
+    border-color: var(--accent);
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+  }
+
+  .stat-block {}
+
+  .stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-val span { font-size: 22px; }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-eyebrow::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .section-title em {
+    font-style: normal;
+    color: var(--gold);
+  }
+
+  /* ── GLASS CARD ── */
+  .glass-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 2px;
+    padding: 32px;
+    transition: transform 0.35s, border-color 0.35s, box-shadow 0.35s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(212,175,55,0.06), transparent 60%);
+    pointer-events: none;
+  }
+
+  .glass-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212,175,55,0.35);
+    box-shadow: 0 20px 60px rgba(212,175,55,0.1);
+  }
+
+  /* ── LIVE MARKET ── */
+  #market { padding: 100px 0; background: var(--bg2); }
+
+  .market-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .world-map-container {
+    position: relative;
+    height: 360px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #mapCanvas { width: 100%; height: 100%; }
+
+  .market-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .price-row {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: border-color 0.3s;
+  }
+
+  .price-row:hover { border-color: rgba(212,175,55,0.4); }
+
+  .price-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+  }
+
+  .price-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .price-change {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .price-change.up {
+    color: #00E676;
+    background: rgba(0,230,118,0.12);
+  }
+
+  .price-change.down {
+    color: #FF5252;
+    background: rgba(255,82,82,0.12);
+  }
+
+  .news-block {
+    grid-column: 1 / -1;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    padding: 28px 32px;
+  }
+
+  .news-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .news-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .news-item:last-child { border-bottom: none; }
+
+  .news-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── CALCULATOR ── */
+  #calculator { padding: 100px 0; }
+
+  .calc-wrapper {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    padding: 56px;
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+
+  .slider-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .slider-value {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+
+  .slider-value span { font-size: 24px; }
+
+  input[type=range] {
+    width: 100%;
+    appearance: none;
+    height: 3px;
+    background: linear-gradient(to right, var(--gold) 0%, var(--gold) 50%, rgba(255,255,255,0.1) 50%);
+    border-radius: 0;
+    outline: none;
+    margin-bottom: 24px;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px; height: 18px;
+    background: var(--gold);
+    border: 2px solid var(--bg);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(212,175,55,0.5);
+  }
+
+  .scenario-btns {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .scenario-btn {
+    padding: 8px 20px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .scenario-btn.active, .scenario-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,175,55,0.08);
+  }
+
+  .calc-results { display: flex; flex-direction: column; gap: 20px; }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 2px;
+  }
+
+  .result-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .result-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .result-val.gold { color: var(--gold); }
+  .result-val.accent { color: var(--accent); }
+
+  /* ── PORTFOLIO CHART ── */
+  .portfolio-donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 20px;
+  }
+
+  .donut-labels { display: flex; flex-direction: column; gap: 10px; }
+
+  .donut-label-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .donut-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── WHY ENERGY ── */
+  #why { padding: 100px 0; background: var(--bg2); }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 48px;
+  }
+
+  .why-card { text-align: left; }
+
+  .why-icon {
+    width: 52px; height: 52px;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+    position: relative;
+  }
+
+  .why-icon::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0;
+    width: 100%; height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+  }
+
+  .why-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .why-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  /* ── PROTECTION ── */
+  #protection { padding: 100px 0; }
+
+  .protection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 48px;
+  }
+
+  .protection-item {
+    display: flex;
+    gap: 20px;
+    padding: 28px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .protection-item:hover {
+    border-color: rgba(212,175,55,0.35);
+    transform: translateX(4px);
+  }
+
+  .prot-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 40px;
+    font-weight: 300;
+    color: rgba(212,175,55,0.3);
+    line-height: 1;
+    flex-shrink: 0;
+    width: 40px;
+  }
+
+  .prot-text h4 {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .prot-text p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── DASHBOARD ── */
+  #dashboard { padding: 100px 0; background: var(--bg2); }
+
+  .dash-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .dash-tab {
+    padding: 12px 28px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.3s;
+  }
+
+  .dash-tab.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+
+  .dash-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .metric-box {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    padding: 24px;
+  }
+
+  .metric-box .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .metric-box .val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+  }
+
+  .metric-box .val.pos { color: #00E676; }
+  .metric-box .val.neg { color: #FF5252; }
+  .metric-box .val.gold { color: var(--gold); }
+
+  .chart-container {
+    position: relative;
+    height: 260px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  #performanceCanvas { width: 100%; height: 100%; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials { padding: 100px 0; }
+
+  .testimonials-carousel {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .testi-card {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    padding: 36px;
+    position: relative;
+  }
+
+  .testi-card::before {
+    content: '"';
+    position: absolute;
+    top: 16px; left: 24px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 80px;
+    color: rgba(212,175,55,0.15);
+    line-height: 1;
+  }
+
+  .testi-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 24px;
+    margin-top: 16px;
+  }
+
+  .testi-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .testi-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #B8960C);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #000;
+    flex-shrink: 0;
+  }
+
+  .testi-name { font-weight: 600; font-size: 15px; }
+  .testi-role { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* ── FAQ ── */
+  #faq { padding: 100px 0; background: var(--bg2); }
+
+  .faq-list {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .faq-item {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .faq-q {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    gap: 16px;
+  }
+
+  .faq-icon {
+    width: 24px; height: 24px;
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: var(--gold);
+    font-size: 16px;
+    transition: transform 0.3s;
+  }
+
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    padding: 0 28px;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 200px;
+    padding: 0 28px 22px;
+  }
+
+  /* ── CONTACT ── */
+  #contact { padding: 100px 0; }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 48px;
+    align-items: start;
+  }
+
+  .contact-info h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 28px;
+    color: var(--text);
+  }
+
+  .contact-detail {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    font-size: 15px;
+    color: var(--text-muted);
+  }
+
+  .contact-detail .icon {
+    width: 36px; height: 36px;
+    border: 1px solid var(--glass-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+
+  .contact-detail a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .contact-detail a:hover { color: var(--gold); }
+
+  .contact-form {
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    border-radius: 2px;
+    padding: 40px;
+  }
+
+  .form-group { margin-bottom: 20px; }
+
+  .form-label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .form-input, .form-select {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 2px;
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  .form-input:focus, .form-select:focus {
+    border-color: var(--gold);
+  }
+
+  .form-select option { background: var(--bg2); }
+
+  /* ── LEGAL ── */
+  .legal-bar {
+    background: #030303;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding: 20px 40px;
+    text-align: center;
+    font-size: 11px;
+    color: rgba(138,155,174,0.6);
+    line-height: 1.7;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--glass-border);
+    padding: 60px 0 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+
+  .footer-brand .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .footer-brand p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 280px;
+  }
+
+  .footer-col h4 {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .footer-col a {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .footer-col a:hover { color: var(--text); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: rgba(138,155,174,0.5);
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── GOLD LINE DIVIDER ── */
+  .gold-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    margin-bottom: 20px;
+  }
+
+  /* ── LIVE DOT ── */
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: #00E676;
+    text-transform: uppercase;
+  }
+
+  .live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #00E676;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  /* responsive basics */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .container { padding: 0 24px; }
+    .market-grid, .calc-wrapper, .protection-grid, .contact-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .testimonials-carousel { grid-template-columns: 1fr; }
+    .dash-metrics { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .calc-wrapper { padding: 32px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Oil Capital <span>Fund</span></div>
+  <ul class="nav-links">
+    <li><a href="#market">Trh</a></li>
+    <li><a href="#calculator">Kalkulačka</a></li>
+    <li><a href="#dashboard">Výkonnost</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Konzultace</button>
+</nav>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-inner" id="tickerInner"></div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="container">
+    <div class="hero-content reveal">
+      <div class="hero-eyebrow">Prémiová investiční platforma</div>
+      <h1 class="hero-title">
+        Energetické investice<br>
+        pro <em>příští desetiletí</em>
+      </h1>
+      <p class="hero-sub">
+        Získejte přístup k příležitostem v globálním energetickém sektoru prostřednictvím diverzifikované investiční strategie zaměřené na ropu, infrastrukturu a energetické trhy.
+      </p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('calculator').scrollIntoView({behavior:'smooth'})">Vypočítat potenciální výnos</button>
+        <button class="btn-outline" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Požádat o konzultaci</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-block">
+          <div class="stat-val" id="aum-counter">$<span id="aum">0</span>M</div>
+          <div class="stat-label">Aktiva ve správě</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val"><span id="countries-counter">0</span>+</div>
+          <div class="stat-label">Zemí globální expozice</div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-val"><span id="risk-counter">0</span>%</div>
+          <div class="stat-label">Portfolio řízené s ohledem na rizika</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE MARKET -->
+<section id="market">
+  <div class="container">
+    <div class="section-eyebrow reveal">
+      <span class="live-badge"><span class="live-dot"></span>Live data</span>
+    </div>
+    <h2 class="section-title reveal">Globální <em>energetický trh</em></h2>
+    <p class="reveal" style="color:var(--text-muted);max-width:560px;font-size:15px;margin-bottom:0">Sledujte klíčové indikátory ropného trhu a energetické infrastruktury v reálném čase.</p>
+
+    <div class="market-grid reveal">
+      <div class="world-map-container">
+        <canvas id="mapCanvas"></canvas>
+      </div>
+
+      <div class="market-prices">
+        <div class="price-row">
+          <div>
+            <div class="price-name">Brent Crude Oil</div>
+            <div class="price-val" id="brent-price">$84.32</div>
+          </div>
+          <div class="price-change up" id="brent-change">+1.24%</div>
+        </div>
+        <div class="price-row">
+          <div>
+            <div class="price-name">WTI Crude Oil</div>
+            <div class="price-val" id="wti-price">$79.85</div>
+          </div>
+          <div class="price-change up" id="wti-change">+0.87%</div>
+        </div>
+        <div class="price-row">
+          <div>
+            <div class="price-name">Energetická poptávka</div>
+            <div class="price-val" id="demand-price">102.4 Mb/d</div>
+          </div>
+          <div class="price-change up" id="demand-change">+0.3%</div>
+        </div>
+        <div class="price-row">
+          <div>
+            <div class="price-name">Globální nabídka</div>
+            <div class="price-val" id="supply-price">100.8 Mb/d</div>
+          </div>
+          <div class="price-change down" id="supply-change">-0.15%</div>
+        </div>
+      </div>
+
+      <div class="news-block">
+        <div class="news-title">▸ Aktuální vývoj trhu</div>
+        <div class="news-item"><div class="news-dot"></div><span>OPEC+ pokračuje v úpravách těžby s cílem stabilizovat trh a udržet ceny v rovnovážném pásmu.</span></div>
+        <div class="news-item"><div class="news-dot"></div><span>Geopolitická rizika ovlivňují volatilitu energetických trhů — investoři sledují vývoj v klíčových regionech.</span></div>
+        <div class="news-item"><div class="news-dot"></div><span>Analytici upozorňují na možné scénáře růstu i poklesu cen v závislosti na globální nabídce a poptávce.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section id="calculator">
+  <div class="container">
+    <div class="section-eyebrow reveal">Investiční nástroj</div>
+    <h2 class="section-title reveal">Kalkulačka <em>potenciálního výnosu</em></h2>
+
+    <div class="calc-wrapper reveal">
+      <div>
+        <div class="slider-label">Výše investice</div>
+        <div class="slider-value">$<span id="invest-display">10,000</span></div>
+        <input type="range" id="invest-slider" min="5000" max="20000" value="10000" step="500">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-top:-16px;margin-bottom:28px">
+          <span>$5,000</span><span>$20,000</span>
+        </div>
+
+        <div class="slider-label" style="margin-top:8px">Investiční horizont (roky)</div>
+        <div class="slider-value"><span id="years-display">3</span> <span>roky</span></div>
+        <input type="range" id="years-slider" min="1" max="10" value="3" step="1">
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted);margin-top:-16px;margin-bottom:28px">
+          <span>1 rok</span><span>10 let</span>
+        </div>
+
+        <div class="slider-label">Scénář výpočtu</div>
+        <div class="scenario-btns">
+          <button class="scenario-btn" data-rate="0.06" onclick="setScenario(this, 0.06)">Konzervativní</button>
+          <button class="scenario-btn active" data-rate="0.11" onclick="setScenario(this, 0.11)">Vyvážený</button>
+          <button class="scenario-btn" data-rate="0.17" onclick="setScenario(this, 0.17)">Růstový</button>
+        </div>
+
+        <!-- Mini donut chart -->
+        <div class="portfolio-donut-wrap">
+          <canvas id="donutCanvas" width="110" height="110"></canvas>
+          <div class="donut-labels">
+            <div class="donut-label-row"><div class="donut-dot" style="background:#D4AF37"></div><span>Ropa & plyn — 45%</span></div>
+            <div class="donut-label-row"><div class="donut-dot" style="background:#00D4FF"></div><span>Infrastruktura — 30%</span></div>
+            <div class="donut-label-row"><div class="donut-dot" style="background:#4CAF50"></div><span>Energie & utility — 15%</span></div>
+            <div class="donut-label-row"><div class="donut-dot" style="background:#9C27B0"></div><span>Likvidní rezerva — 10%</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="calc-results">
+        <div class="result-row">
+          <div class="result-label">Počáteční kapitál</div>
+          <div class="result-val gold" id="calc-initial">$10,000</div>
+        </div>
+        <div class="result-row">
+          <div class="result-label">Odhadovaný celkový výnos</div>
+          <div class="result-val accent" id="calc-return">+$3,674</div>
+        </div>
+        <div class="result-row">
+          <div class="result-label">Celková hodnota portfolia</div>
+          <div class="result-val gold" id="calc-total">$13,674</div>
+        </div>
+        <div class="result-row">
+          <div class="result-label">Průměrný roční výnos</div>
+          <div class="result-val" id="calc-annual" style="color:#00E676">11.0% p.a.</div>
+        </div>
+
+        <canvas id="growthCanvas" width="400" height="160" style="width:100%;border:1px solid var(--glass-border);border-radius:2px;margin-top:8px"></canvas>
+
+        <p style="font-size:11px;color:rgba(138,155,174,0.5);line-height:1.6;margin-top:8px">
+          * Projekce výnosů slouží pouze pro ilustrativní účely. Investice jsou spojena s rizikem. Historická výkonnost nezaručuje budoucí výsledky.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY ENERGY -->
+<section id="why">
+  <div class="container">
+    <div class="section-eyebrow reveal">Investiční případ</div>
+    <h2 class="section-title reveal">Proč <em>energetika</em></h2>
+    <p class="reveal" style="color:var(--text-muted);max-width:560px;font-size:15px;margin-bottom:0">Energetický sektor nabízí unikátní kombinaci stability, likvidity a růstového potenciálu.</p>
+
+    <div class="why-grid">
+      <div class="glass-card why-card reveal">
+        <div class="why-icon">🌍</div>
+        <h3>Globální poptávka</h3>
+        <p>Světová spotřeba energie roste. Přes transformaci trhu zůstává ropa a plyn jádrem globální energetické mixu po celé příští desetiletí.</p>
+      </div>
+      <div class="glass-card why-card reveal">
+        <div class="why-icon">🏗️</div>
+        <h3>Investice do infrastruktury</h3>
+        <p>Energetická infrastruktura generuje stabilní cashflow nezávislý na krátkodobých výkyvech. Ropovodní a LNG terminály jsou strategickými aktivy.</p>
+      </div>
+      <div class="glass-card why-card reveal">
+        <div class="why-icon">📊</div>
+        <h3>Likvidita trhu</h3>
+        <p>Komoditní trhy s ropou patří k nejlikvidnějším na světě — s denním objemem obchodů přesahujícím 400 miliard dolarů.</p>
+      </div>
+      <div class="glass-card why-card reveal">
+        <div class="why-icon">⚖️</div>
+        <h3>Výhody diverzifikace</h3>
+        <p>Energetické investice vykazují nízkou korelaci s tradičními akciemi. Ideální nástroj pro snižování celkového portfoliového rizika.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO PROTECTION -->
+<section id="protection">
+  <div class="container">
+    <div class="section-eyebrow reveal">Bezpečnost</div>
+    <h2 class="section-title reveal">Ochrana <em>portfolia</em></h2>
+    <p class="reveal" style="color:var(--text-muted);max-width:560px;font-size:15px">Rámec řízení rizik postavený na osvědčených mezinárodních standardech.</p>
+
+    <div class="protection-grid">
+      <div class="protection-item reveal">
+        <div class="prot-num">01</div>
+        <div class="prot-text">
+          <h4>Diverzifikace portfolia</h4>
+          <p>Rozložení aktiv napříč geografickými regiony, segmenty energetického trhu a investičními instrumenty minimalizuje koncentrační riziko.</p>
+        </div>
+      </div>
+      <div class="protection-item reveal">
+        <div class="prot-num">02</div>
+        <div class="prot-text">
+          <h4>Nezávislá úschova aktiv</h4>
+          <p>Klientská aktiva jsou uchovávána u licencovaných custodianů nezávisle od provozního majetku fondu.</p>
+        </div>
+      </div>
+      <div class="protection-item reveal">
+        <div class="prot-num">03</div>
+        <div class="prot-text">
+          <h4>Compliance procesy</h4>
+          <p>Vnitřní compliance tým zajišťuje soulad s platnou regulací a průběžně monitoruje legislativní vývoj v klíčových jurisdikcích.</p>
+        </div>
+      </div>
+      <div class="protection-item reveal">
+        <div class="prot-num">04</div>
+        <div class="prot-text">
+          <h4>Audity třetích stran</h4>
+          <p>Pravidelné nezávislé audity financí a procesů zajišťují transparentnost a důvěryhodnost reportingu pro investory.</p>
+        </div>
+      </div>
+      <div class="protection-item reveal">
+        <div class="prot-num">05</div>
+        <div class="prot-text">
+          <h4>Regulační monitoring</h4>
+          <p>Nepřetržité sledování regulatorního prostředí umožňuje proaktivní adaptaci strategie a ochranu klientských pozic.</p>
+        </div>
+      </div>
+      <div class="protection-item reveal">
+        <div class="prot-num">06</div>
+        <div class="prot-text">
+          <h4>Stresové testování</h4>
+          <p>Portfolio je pravidelně testováno na extrémní tržní scénáře, aby bylo zajištěno, že odolá i výjimečným geopolitickým a makroekonomickým šokům.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE DASHBOARD -->
+<section id="dashboard">
+  <div class="container">
+    <div class="section-eyebrow reveal">Výkonnostní data</div>
+    <h2 class="section-title reveal">Výkonnostní <em>dashboard</em></h2>
+
+    <div class="reveal">
+      <div class="dash-tabs">
+        <button class="dash-tab active" onclick="setTab(this,'1y')">1 rok</button>
+        <button class="dash-tab" onclick="setTab(this,'3y')">3 roky</button>
+        <button class="dash-tab" onclick="setTab(this,'5y')">5 let</button>
+      </div>
+
+      <div class="dash-metrics">
+        <div class="metric-box">
+          <div class="label">Průměrný roční výnos</div>
+          <div class="val gold" id="perf-return">+11.4%</div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Volatilita</div>
+          <div class="val" id="perf-vol">8.2%</div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Rizikové skóre</div>
+          <div class="val pos" id="perf-risk">Střední</div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Maximální pokles hodnoty</div>
+          <div class="val neg" id="perf-dd">-12.3%</div>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="performanceCanvas"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-eyebrow reveal">Klientské reference</div>
+    <h2 class="section-title reveal">Co říkají <em>naši klienti</em></h2>
+
+    <div class="testimonials-carousel">
+      <div class="testi-card glass-card reveal">
+        <div class="testi-text">Investoval jsem do energetického sektoru poprvé v životě a tým Oil Capital Fund mi dal pocit jistoty. Profesionální přístup, transparentní komunikace a solidní výsledky.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div>
+            <div class="testi-name">Martin K.</div>
+            <div class="testi-role">Podnikatel, Praha</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card glass-card reveal">
+        <div class="testi-text">Oceňuji zejména individuální přístup a detailní reporting. Portfolio konzultant se mi věnoval osobně a pomohl mi nastavit strategii přesně podle mých cílů.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">L</div>
+          <div>
+            <div class="testi-name">Lucie V.</div>
+            <div class="testi-role">Lékař, Brno</div>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card glass-card reveal">
+        <div class="testi-text">Jako zkušený investor jsem skeptický k novým platformám. Oil Capital Fund mě přesvědčil důkladnou due diligence a reálnými výsledky, které odpovídají projekcím.</div>
+        <div class="testi-author">
+          <div class="testi-avatar">P</div>
+          <div>
+            <div class="testi-name">Petr H.</div>
+            <div class="testi-role">Finanční analytik, Praha</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="section-eyebrow reveal">Odpovědi</div>
+    <h2 class="section-title reveal">Časté <em>otázky</em></h2>
+
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Jaká rizika jsou spojena s investicí do energetiky?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">Investice do energetického sektoru nesou tržní, geopolitická a komoditní rizika. Ceny ropy mohou výrazně kolísat v závislosti na nabídce, poptávce a geopolitickém vývoji. Diverzifikace portfolia a aktivní řízení rizik tato rizika snižují, nikoli eliminují. Vždy existuje možnost částečné nebo úplné ztráty vloženého kapitálu.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Jaký je proces vstupu do fondu?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">Proces začíná úvodní konzultací s naším poradcem, kde společně definujeme vaše investiční cíle a rizikový profil. Následuje KYC (Know Your Customer) proces, podpis investiční smlouvy a nastavení investičního plánu. Celý onboarding probíhá online a trvá obvykle 3–5 pracovních dní.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Jak probíhá výběr prostředků?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">Výběry jsou zpracovávány standardně do 5–10 pracovních dní v závislosti na zvoleném investičním produktu a podmínkách smlouvy. Likvidní část portfolia umožňuje rychlejší přístup k prostředkům. Předčasné ukončení investice může podléhat poplatku za předčasný výběr.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Jaké jsou regulační požadavky?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">Oil Capital Fund operuje v souladu s platnými finančními regulacemi. Investoři procházejí standardním KYC/AML procesem. Fond uplatňuje transparentní reporting v souladu s mezinárodními standardy. Doporučujeme konzultaci s daňovým poradcem ohledně specifik vaší jurisdikce.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          <span>Jaká je minimální výše investice?</span>
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-a">Minimální vstupní investice je 5 000 USD. Pro prémiové strategie s individuálním portfolio managementem je minimální výše 20 000 USD. Konzultace je bezplatná a nezavazuje vás k žádnému závazku.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="section-eyebrow reveal">Začněte dnes</div>
+    <h2 class="section-title reveal">Naplánujte si <em>konzultaci</em></h2>
+
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <h3>Osobní přístup<br>ke každému investorovi</h3>
+        <p style="color:var(--text-muted);font-size:14px;margin-bottom:32px;line-height:1.75">
+          Náš tým je připraven odpovědět na vaše otázky a pomoci vám nastavit investiční strategii přesně podle vašich cílů. Kontaktujte nás telefonicky, e-mailem nebo vyplňte formulář.
+        </p>
+
+        <div class="contact-detail">
+          <div class="icon">👤</div>
+          <div>
+            <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Portfolio konzultant</div>
+            <div style="color:var(--text)">Eva Silhartova</div>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="icon">📞</div>
+          <div>
+            <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">Telefon</div>
+            <a href="tel:+420728534615">+420 728 534 615</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="icon">✉️</div>
+          <div>
+            <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:4px">E-mail</div>
+            <a href="mailto:evasihartova@gmail.com">evasihartova@gmail.com</a>
+          </div>
+        </div>
+
+        <div style="margin-top:36px;padding:24px;background:var(--glass);border:1px solid var(--glass-border);border-radius:2px">
+          <div style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:12px">Dostupnost</div>
+          <div style="font-size:14px;color:var(--text-muted);line-height:1.7">Po–Pá: 9:00 – 18:00<br>Bezplatná úvodní konzultace</div>
+        </div>
+      </div>
+
+      <div class="contact-form reveal">
+        <div class="form-group">
+          <label class="form-label">Vaše jméno</label>
+          <input type="text" class="form-input" placeholder="Jan Novák">
+        </div>
+        <div class="form-group">
+          <label class="form-label">E-mail</label>
+          <input type="email" class="form-input" placeholder="jan@email.cz">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Telefon</label>
+          <input type="tel" class="form-input" placeholder="+420 ___  ___ ___">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Výše investice</label>
+          <select class="form-select">
+            <option value="">Vyberte rozsah</option>
+            <option>$5,000 – $10,000</option>
+            <option>$10,000 – $20,000</option>
+            <option>$20,000 – $50,000</option>
+            <option>$50,000+</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Zpráva (volitelně)</label>
+          <textarea class="form-input" rows="3" placeholder="Vaše otázky nebo preference..." style="resize:vertical"></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%;text-align:center;padding:18px" onclick="alert('Děkujeme! Budeme vás kontaktovat do 24 hodin.')">Naplánovat konzultaci</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo">Oil Capital Fund</div>
+        <p>Prémiová investiční platforma zaměřená na globální energetický sektor a ropnou infrastrukturu.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Platforma</h4>
+        <ul>
+          <li><a href="#market">Živý trh</a></li>
+          <li><a href="#calculator">Kalkulačka</a></li>
+          <li><a href="#dashboard">Dashboard</a></li>
+          <li><a href="#why">Proč energetika</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Investování</h4>
+        <ul>
+          <li><a href="#protection">Ochrana portfolia</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#testimonials">Reference</a></li>
+          <li><a href="#contact">Konzultace</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Kontakt</h4>
+        <ul>
+          <li><a href="tel:+420728534615">+420 728 534 615</a></li>
+          <li><a href="mailto:evasihartova@gmail.com">evasihartova@gmail.com</a></li>
+          <li><a href="#">Eva Silhartova</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Oil Capital Fund. Všechna práva vyhrazena.</span>
+      <span>Prémiová investiční platforma</span>
+    </div>
+  </div>
+</footer>
+
+<!-- LEGAL -->
+<div class="legal-bar">
+  <strong style="color:rgba(138,155,174,0.8)">Právní upozornění:</strong> Investice jsou spojeny s rizikem, včetně možnosti ztráty části nebo celého investovaného kapitálu. Historická výkonnost nezaručuje budoucí výsledky. Veškeré projekce výnosů slouží pouze pro ilustrativní účely a nepředstavují žádnou garanci budoucího zhodnocení.
+</div>
+
+<script>
+// ── PARTICLES ──
+(function(){
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, particles=[];
+
+  function resize(){
+    W = canvas.width = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor(){
+      this.x = Math.random()*W;
+      this.y = Math.random()*H;
+      this.vx = (Math.random()-0.5)*0.3;
+      this.vy = (Math.random()-0.5)*0.3;
+      this.r = Math.random()*1.5+0.3;
+      this.gold = Math.random()>0.7;
+      this.alpha = Math.random()*0.4+0.1;
+    }
+    update(){
+      this.x += this.vx; this.y += this.vy;
+      if(this.x<0) this.x=W;
+      if(this.x>W) this.x=0;
+      if(this.y<0) this.y=H;
+      if(this.y>H) this.y=0;
+    }
+    draw(){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+      ctx.fillStyle = this.gold
+        ? `rgba(212,175,55,${this.alpha})`
+        : `rgba(0,212,255,${this.alpha*0.6})`;
+      ctx.fill();
+    }
+  }
+
+  function init(){
+    resize();
+    particles = Array.from({length:120}, ()=>new Particle());
+    window.addEventListener('resize', resize);
+    loop();
+  }
+
+  function drawConnections(){
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+        const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<100){
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle=`rgba(212,175,55,${0.06*(1-d/100)})`;
+          ctx.lineWidth=0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function loop(){
+    ctx.clearRect(0,0,W,H);
+    drawConnections();
+    particles.forEach(p=>{p.update();p.draw();});
+    requestAnimationFrame(loop);
+  }
+
+  init();
+})();
+
+// ── TICKER ──
+(function(){
+  const data = [
+    {sym:'BRENT',val:'$84.32',chg:'+1.24%',up:true},
+    {sym:'WTI',val:'$79.85',chg:'+0.87%',up:true},
+    {sym:'NAT GAS',val:'$2.41',chg:'-0.43%',up:false},
+    {sym:'ENERGY ETF',val:'$91.20',chg:'+0.52%',up:true},
+    {sym:'OIL DEMAND',val:'102.4 Mb/d',chg:'+0.3%',up:true},
+    {sym:'USD/EUR',val:'0.9234',chg:'+0.11%',up:true},
+    {sym:'GOLD',val:'$2,341',chg:'-0.22%',up:false},
+    {sym:'S&P 500',val:'5,312',chg:'+0.35%',up:true},
+  ];
+  let html = '';
+  for(let i=0;i<2;i++){
+    data.forEach(d=>{
+      html += `<div class="ticker-item"><span class="sym">${d.sym}</span><span>${d.val}</span><span class="${d.up?'up':'down'}">${d.chg}</span></div>`;
+    });
+  }
+  document.getElementById('tickerInner').innerHTML=html;
+})();
+
+// ── WORLD MAP (SVG-based dot map) ──
+(function(){
+  const canvas = document.getElementById('mapCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = 560; canvas.height = 360;
+
+  const hotspots = [
+    {x:0.55,y:0.28,label:'NORTH SEA'},{x:0.35,y:0.32,label:'GULF OF MEXICO'},
+    {x:0.52,y:0.42,label:'MIDDLE EAST'},{x:0.38,y:0.55,label:'W. AFRICA'},
+    {x:0.3,y:0.28,label:'VENEZUELA'},{x:0.65,y:0.35,label:'RUSSIA'},
+    {x:0.72,y:0.45,label:'CHINA'},{x:0.82,y:0.6,label:'AUSTRALIA'},
+  ];
+
+  let frame=0;
+
+  function drawMap(){
+    const W=canvas.width, H=canvas.height;
+    ctx.clearRect(0,0,W,H);
+
+    // Grid
+    ctx.strokeStyle='rgba(212,175,55,0.06)';
+    ctx.lineWidth=0.5;
+    for(let i=0;i<W;i+=40){ ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,H);ctx.stroke(); }
+    for(let j=0;j<H;j+=40){ ctx.beginPath();ctx.moveTo(0,j);ctx.lineTo(W,j);ctx.stroke(); }
+
+    // Equator
+    ctx.strokeStyle='rgba(212,175,55,0.2)';
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(0,H*0.45);ctx.lineTo(W,H*0.45);ctx.stroke();
+
+    // Dot continent silhouette (simplified)
+    const dots = [
+      // N America
+      ...Array.from({length:60},(_,i)=>({x:0.1+Math.random()*0.22, y:0.15+Math.random()*0.3})),
+      // S America
+      ...Array.from({length:35},(_,i)=>({x:0.18+Math.random()*0.1, y:0.48+Math.random()*0.35})),
+      // Europe
+      ...Array.from({length:50},(_,i)=>({x:0.43+Math.random()*0.1, y:0.18+Math.random()*0.2})),
+      // Africa
+      ...Array.from({length:70},(_,i)=>({x:0.43+Math.random()*0.12, y:0.38+Math.random()*0.38})),
+      // Asia
+      ...Array.from({length:100},(_,i)=>({x:0.54+Math.random()*0.28, y:0.15+Math.random()*0.45})),
+      // Australia
+      ...Array.from({length:30},(_,i)=>({x:0.74+Math.random()*0.1, y:0.55+Math.random()*0.2})),
+    ];
+
+    dots.forEach(d=>{
+      ctx.beginPath();
+      ctx.arc(d.x*W, d.y*H, 1.2, 0, Math.PI*2);
+      ctx.fillStyle='rgba(138,155,174,0.25)';
+      ctx.fill();
+    });
+
+    // Hotspots
+    hotspots.forEach(h=>{
+      const px = h.x*W, py = h.y*H;
+      const pulse = (Math.sin(frame*0.05 + h.x*10)*0.5+0.5);
+
+      ctx.beginPath();
+      ctx.arc(px,py,6+pulse*8,0,Math.PI*2);
+      ctx.fillStyle=`rgba(212,175,55,${0.05+pulse*0.1})`;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(px,py,4,0,Math.PI*2);
+      ctx.fillStyle='rgba(212,175,55,0.8)';
+      ctx.fill();
+
+      ctx.fillStyle='rgba(212,175,55,0.7)';
+      ctx.font='9px JetBrains Mono, monospace';
+      ctx.fillText(h.label, px+8, py+3);
+    });
+
+    // Connection lines between hotspots
+    if(frame%60 < 40){
+      const i = Math.floor(frame/60) % hotspots.length;
+      const j = (i+1) % hotspots.length;
+      const a = hotspots[i], b = hotspots[j];
+      const prog = (frame%60)/40;
+      ctx.beginPath();
+      ctx.moveTo(a.x*W, a.y*H);
+      ctx.lineTo(a.x*W+(b.x-a.x)*W*prog, a.y*H+(b.y-a.y)*H*prog);
+      ctx.strokeStyle='rgba(0,212,255,0.3)';
+      ctx.lineWidth=1;
+      ctx.stroke();
+    }
+
+    frame++;
+    requestAnimationFrame(drawMap);
+  }
+
+  // seed stable dots once
+  const stableDots = [
+    ...Array.from({length:60},()=>({x:0.1+Math.random()*0.22, y:0.15+Math.random()*0.3})),
+    ...Array.from({length:35},()=>({x:0.18+Math.random()*0.1, y:0.48+Math.random()*0.35})),
+    ...Array.from({length:50},()=>({x:0.43+Math.random()*0.1, y:0.18+Math.random()*0.2})),
+    ...Array.from({length:70},()=>({x:0.43+Math.random()*0.12, y:0.38+Math.random()*0.38})),
+    ...Array.from({length:100},()=>({x:0.54+Math.random()*0.28, y:0.15+Math.random()*0.45})),
+    ...Array.from({length:30},()=>({x:0.74+Math.random()*0.1, y:0.55+Math.random()*0.2})),
+  ];
+
+  drawMap();
+})();
+
+// ── DONUT CHART ──
+(function(){
+  const canvas = document.getElementById('donutCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx=W/2, cy=H/2, r=44, inner=28;
+  const slices=[
+    {val:0.45,color:'#D4AF37'},
+    {val:0.30,color:'#00D4FF'},
+    {val:0.15,color:'#4CAF50'},
+    {val:0.10,color:'#9C27B0'},
+  ];
+  let start = -Math.PI/2;
+  slices.forEach(s=>{
+    const angle = s.val*2*Math.PI;
+    ctx.beginPath();
+    ctx.moveTo(cx,cy);
+    ctx.arc(cx,cy,r,start,start+angle);
+    ctx.closePath();
+    ctx.fillStyle=s.color;
+    ctx.fill();
+    start+=angle;
+  });
+  ctx.beginPath();
+  ctx.arc(cx,cy,inner,0,Math.PI*2);
+  ctx.fillStyle='#050505';
+  ctx.fill();
+})();
+
+// ── CALCULATOR ──
+let calcRate = 0.11;
+const investSlider = document.getElementById('invest-slider');
+const yearsSlider = document.getElementById('years-slider');
+
+function fmt(n){ return n.toLocaleString('en-US'); }
+
+function calcUpdate(){
+  const inv = +investSlider.value;
+  const yrs = +yearsSlider.value;
+  const rate = calcRate;
+  const total = inv * Math.pow(1+rate, yrs);
+  const ret = total - inv;
+
+  document.getElementById('invest-display').textContent = fmt(inv);
+  document.getElementById('years-display').textContent = yrs;
+  document.getElementById('calc-initial').textContent = '$'+fmt(inv);
+  document.getElementById('calc-return').textContent = '+$'+fmt(Math.round(ret));
+  document.getElementById('calc-total').textContent = '$'+fmt(Math.round(total));
+  document.getElementById('calc-annual').textContent = (rate*100).toFixed(1)+'% p.a.';
+
+  // Update slider gradient
+  const pct = ((inv-5000)/(20000-5000))*100;
+  investSlider.style.background = `linear-gradient(to right, var(--gold) 0%, var(--gold) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
+  const pctY = ((yrs-1)/(10-1))*100;
+  yearsSlider.style.background = `linear-gradient(to right, var(--gold) 0%, var(--gold) ${pctY}%, rgba(255,255,255,0.1) ${pctY}%)`;
+
+  // Growth chart
+  drawGrowthChart(inv, yrs, rate);
+}
+
+function setScenario(btn, rate){
+  document.querySelectorAll('.scenario-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  calcRate = rate;
+  calcUpdate();
+}
+
+function drawGrowthChart(inv, yrs, rate){
+  const canvas = document.getElementById('growthCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const pts = [];
+  for(let y=0;y<=yrs;y++){
+    pts.push({x:y/yrs*W, y:inv*Math.pow(1+rate,y)});
+  }
+  const maxV = pts[pts.length-1].y;
+  const minV = inv;
+  const range = maxV - minV || 1;
+  const pad = 20;
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0,0,0,H);
+  grad.addColorStop(0,'rgba(212,175,55,0.25)');
+  grad.addColorStop(1,'rgba(212,175,55,0)');
+  ctx.beginPath();
+  pts.forEach((p,i)=>{
+    const px=p.x, py=pad+(1-(p.y-minV)/range)*(H-pad*2);
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();
+  ctx.fillStyle=grad;ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  pts.forEach((p,i)=>{
+    const px=p.x, py=pad+(1-(p.y-minV)/range)*(H-pad*2);
+    i===0?ctx.moveTo(px,py):ctx.lineTo(px,py);
+  });
+  ctx.strokeStyle='var(--gold)';ctx.lineWidth=2;ctx.stroke();
+
+  // Dots
+  pts.forEach(p=>{
+    const px=p.x, py=pad+(1-(p.y-minV)/range)*(H-pad*2);
+    ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);
+    ctx.fillStyle='var(--gold)';ctx.fill();
+  });
+}
+
+investSlider.addEventListener('input', calcUpdate);
+yearsSlider.addEventListener('input', calcUpdate);
+calcUpdate();
+
+// ── PERFORMANCE CHART ──
+const perfData = {
+  '1y':{return:'+11.4%',vol:'8.2%',risk:'Střední',dd:'-12.3%',
+    pts:[100,104,102,108,111,109,113,110,114,112,116,114]},
+  '3y':{return:'+34.7%',vol:'9.8%',risk:'Střední',dd:'-18.5%',
+    pts:[100,106,102,110,115,112,118,116,120,122,119,125,130,128,135]},
+  '5y':{return:'+68.2%',vol:'11.2%',risk:'Střední-Vysoké',dd:'-22.1%',
+    pts:[100,104,108,103,112,118,115,120,125,122,130,128,135,132,140,138,145,148,152,150,168]},
+};
+
+function drawPerfChart(tab){
+  const canvas = document.getElementById('performanceCanvas');
+  if(!canvas) return;
+  canvas.width = canvas.parentElement.offsetWidth || 800;
+  canvas.height = 260;
+  const ctx = canvas.getContext('2d');
+  const W=canvas.width, H=canvas.height;
+  ctx.clearRect(0,0,W,H);
+
+  const d = perfData[tab];
+  const pts = d.pts;
+  const minV = Math.min(...pts), maxV = Math.max(...pts);
+  const range = maxV-minV||1;
+  const pad = {t:20,b:30,l:20,r:20};
+  const iW = W-pad.l-pad.r, iH = H-pad.t-pad.b;
+
+  // Grid
+  ctx.strokeStyle='rgba(255,255,255,0.05)';ctx.lineWidth=1;
+  for(let i=0;i<5;i++){
+    const y=pad.t+iH*i/4;
+    ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(W-pad.r,y);ctx.stroke();
+  }
+
+  // Gradient
+  const grad=ctx.createLinearGradient(0,pad.t,0,H-pad.b);
+  grad.addColorStop(0,'rgba(0,212,255,0.2)');
+  grad.addColorStop(1,'rgba(0,212,255,0)');
+  ctx.beginPath();
+  pts.forEach((v,i)=>{
+    const x=pad.l+i/(pts.length-1)*iW;
+    const y=pad.t+(1-(v-minV)/range)*iH;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.lineTo(W-pad.r,H-pad.b);ctx.lineTo(pad.l,H-pad.b);ctx.closePath();
+  ctx.fillStyle=grad;ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  pts.forEach((v,i)=>{
+    const x=pad.l+i/(pts.length-1)*iW;
+    const y=pad.t+(1-(v-minV)/range)*iH;
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.strokeStyle='#00D4FF';ctx.lineWidth=2;ctx.stroke();
+}
+
+function setTab(btn, tab){
+  document.querySelectorAll('.dash-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d=perfData[tab];
+  document.getElementById('perf-return').textContent=d.return;
+  document.getElementById('perf-vol').textContent=d.vol;
+  document.getElementById('perf-risk').textContent=d.risk;
+  document.getElementById('perf-dd').textContent=d.dd;
+  drawPerfChart(tab);
+}
+
+drawPerfChart('1y');
+window.addEventListener('resize',()=>drawPerfChart(
+  document.querySelector('.dash-tab.active')?.textContent.includes('3')?'3y':
+  document.querySelector('.dash-tab.active')?.textContent.includes('5')?'5y':'1y'
+));
+
+// ── FAQ ──
+function toggleFaq(btn){
+  const item = btn.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el=>el.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+// ── LIVE PRICE FLUCTUATION ──
+function fluctuate(id, base, isPrice=true){
+  const el = document.getElementById(id);
+  if(!el) return;
+  setInterval(()=>{
+    const delta = (Math.random()-0.48)*0.5;
+    const val = base + delta;
+    el.textContent = isPrice ? ('$'+val.toFixed(2)) : val.toFixed(1)+'%';
+  }, 3000+Math.random()*2000);
+}
+
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){ e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+},{threshold:0.1});
+reveals.forEach(r=>observer.observe(r));
+
+// ── COUNTER ANIMATION ──
+function animateCounter(id, target, prefix='', suffix=''){
+  const el = document.getElementById(id);
+  if(!el) return;
+  let current = 0;
+  const step = target/60;
+  const interval = setInterval(()=>{
+    current = Math.min(current+step, target);
+    el.textContent = Math.round(current);
+    if(current>=target) clearInterval(interval);
+  },16);
+}
+
+setTimeout(()=>{
+  animateCounter('aum', 847);
+  animateCounter('countries-counter', 42);
+  animateCounter('risk-counter', 97);
+},500);
+</script>
+</body>
+</html>
